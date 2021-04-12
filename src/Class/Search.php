@@ -12,6 +12,10 @@ class Search
     /**
      * @var array
      */
-    public $categories= [];
+    public $categories = [];
 
+    /**
+     * @var bool
+     */
+    public $incldesc = false;
 }
