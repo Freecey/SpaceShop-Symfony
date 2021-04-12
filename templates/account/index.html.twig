@@ -5,8 +5,13 @@
 {% block content %}
     <h1>My Account</h1>
     <p>Welcome {{ app.user.firstname }} to your account space:</p>
+    {% for message in app.flashes('message') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
     <hr>
-    - change your password
+    <a href="{{ path('account.password') }}">change your password</a>
     - add address
     - My orders
 {% endblock %}

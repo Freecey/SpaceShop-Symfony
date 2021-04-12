@@ -1,0 +1,26 @@
+.navbar-item-custom, .navbar-item-custom a {
+    color: white;
+}
+
+/*.footer-custom {*/
+/*    position: fixed;*/
+/*    bottom: 0;*/
+/*    width: 100%;*/
+/*    margin-right: auto;*/
+/*    margin-left: auto;*/
+/*}*/
+
+body {
+    min-height: 100vh;
+    position: relative;
+    margin: 0;
+    /*padding-bottom: 100px; //height of the footer*/
+/*box-sizing: border-box;*/
+}
+
+footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    /*height: 100px;*/
+}
