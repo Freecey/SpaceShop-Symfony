@@ -1,20 +1,66 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello CartController!{% endblock %}
+{% block title %}My Cart{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block content %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/home/cedric/projects-GIT/spaceshop/src/Controller/CartController.php'|file_link(0) }}">src/Controller/CartController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/home/cedric/projects-GIT/spaceshop/templates/cart/index.html.twig'|file_link(0) }}">templates/cart/index.html.twig</a></code></li>
-    </ul>
-</div>
+        <h1>Shopping Cart</h1>
+    {% if cart|length > 0 %}
+    <table class="table table-striped my-3">
+        <thead>
+        <tr>
+            <th scope="col"></th>
+            <th scope="col">Product</th>
+            <th scope="col">Quantity</th>
+            <th scope="col" class="text-center">Price</th>
+            <th scope="col" class="text-center">Total</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% set total = null %}
+        {% set totalquantity = null %}
+        {% for product in cart %}
+        <tr>
+            <th>
+                <img src="/uploads/products/{{ product.product.image }}" alt="{{ product.product.name }}" height="75px">
+            </th>
+            <td>
+                <a href="{{ path('products.show', {'slug': product.product.slug}) }}">{{ product.product.name }}</a><br>
+                <small>{{ product.product.subtitle|length > 75 ? product.product.subtitle|slice(0, 75) ~ '...' : product.product.subtitle  }}</small>
+            </td>
+            <td>
+                <a href="{{ path('cart.decrease', {'id': product.product.id}) }}">
+                    <img src="{{ asset('assets/img/minus.png') }}" alt="remove one" height="12">
+                </a>
+                <span class="mx-1">{{ product.quantity }}</span>
+                <a href="{{ path('cart.add', {'id': product.product.id}) }}">
+                    <img src="{{ asset('assets/img/plus.png') }}" alt="add one" height="12">
+                </a>
+            </td>
+            <td class="text-right">{{ ( product.product.price/100 )|format_currency('EUR', locale='de') }}</td>
+            <td class="text-right">{{ ( (product.product.price * product.quantity) / 100 )|format_currency('EUR', locale='de') }}</td>
+            <td>
+                <a href="{{ path('cart.remove', {'id': product.product.id}) }}">
+                    <img src="{{ asset('assets/img/delete.png') }}" alt="remove product" height="18">
+                </a>
+            </td>
+        </tr>
+            {% set totalquantity = totalquantity + product.quantity %}
+            {% set total = total + (product.product.price * product.quantity) %}
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-right">
+        <b>Number of product: </b>{{ cart|length }}<br>
+        <b>Subtotal ({{ totalquantity }} {{ (totalquantity > 1) ? 'items' : 'item' }}): </b>{{ ( total / 100 )|format_currency('EUR', locale='de') }}<br>
+        <a href="" class="btn btn-success">Proceed to checkout</a>
+    </div>
+    {% else %}
+        <hr class="mt-5">
+    <div class="text-center my-4">
+        Your cart is empty.
+    </div>
+        <hr>
+    {% endif %}
 {% endblock %}

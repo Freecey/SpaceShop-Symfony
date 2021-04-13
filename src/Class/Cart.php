@@ -2,14 +2,18 @@
 
 namespace App\Class;
 
+use App\Entity\Product;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 class Cart
 {
     private $session;
+    private $entityManager;
 
-    public function __construct(SessionInterface $session)
+    public function __construct(EntityManagerInterface $entityManager ,SessionInterface $session)
     {
+        $this->entityManager = $entityManager;
         $this->session = $session;
     }
 
@@ -32,8 +36,49 @@ class Cart
         return $this->session->get('cart');
     }
 
-    public function remove()
+    public function delete()
     {
         return $this->session->remove('cart');
+    }
+
+    public function remove($id)
+    {
+        $cart = $this->session->get('cart', []);
+
+        unset($cart[$id]);
+
+        return $this->session->set('cart', $cart);
+    }
+
+    public function decease($id)
+    {
+        $cart = $this->session->get('cart', []);
+
+        if ($cart[$id] > 1) {
+            $cart[$id]--;
+        } else {
+            unset($cart[$id]);
+        }
+        return $this->session->set('cart', $cart);
+    }
+
+    public function getFull()
+    {
+        $cartComplete = [];
+        if ( $this->get() ) {
+            foreach ($this->get() as $id => $quantity)
+            {
+                $product_objet = $this->entityManager->getRepository(Product::class)->findOneById($id);
+                if (!$product_objet) {
+                    $this->remove($id);
+                    continue;
+                }
+                $cartComplete[] = [
+                    'product' => $product_objet,
+                    'quantity' => $quantity
+                ];
+            }
+        }
+        return $cartComplete;
     }
 }
