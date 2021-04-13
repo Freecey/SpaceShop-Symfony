@@ -16,7 +16,7 @@
                     <p class="font-weight-bold">{{ ( product.price/100 )|format_currency('EUR', locale='de') }}</p>
                     <hr>
                     <p>{{ product.description }}</p>
-                    <a href="" class="btn btn-primary">Add to Cart</a>
+                    <a href="{{ path('cart.add', {'id': product.id }) }}" class="btn btn-primary">Add to Cart</a>
                 </div>
             </div>
 
