@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Addresses{% endblock %}
+
+{% block content %}
+    <a href="{{ path('account.address.add') }}" class="btn btn-info float-right">Add Address</a>
+    <h1>My Addresses</h1>
+    <p>Manage your addresses here:</p>
+    <a href="{{ path('account.index') }}">Back to my account</a>
+    {% for message in app.flashes('message') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+    <hr>
+    {% if app.user.addresses|length == 0 %}
+        <p class="text-center">
+        You currently don't have address. Click <a href="{{ path('account.address.add') }}">Here</a> to add one.
+        </p>
+    {% else %}
+        <div class="row">
+            {% for address in app.user.addresses %}
+            <div class="col-md-4">
+        <div class="card" style="width: 18rem;">
+            <div class="card-body">
+                <h5 class="card-title">{{ address.name }}</h5>
+                <p class="card-text">{{ address.firstname }} {{ address.firstname }}<br>
+{#                    {{  address.company ? address.company.'<br>' : ''  }}#}
+                    {{ address.address }}<br>
+                    {{ address.postal }} {{ address.city }}<br>
+                    {{ address.country }}<br>
+                    tel: {{ address.phone }}
+                </p>
+                <a href="{{ path('account.address.modify', {'id': address.id }) }}">Modify Address</a>
+                 |
+                <a href="{{ path('account.address.delete', {'id': address.id }) }}">Delete Address</a>
+            </div>
+        </div>
+            </div>
+        {% endfor %}
+
+        </div>
+    {% endif %}
+{% endblock %}
