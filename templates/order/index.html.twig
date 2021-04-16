@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Review My Order{% endblock %}
+
+{% block content %}
+    <h2>Review my order</h2>
+    <p>Chose your preference before valid your order</p>
+    <hr>
+    <div class="row">
+        <div class="col-md-6">
+            <b>Chose your address of delivery</b><br>
+            {% set formHtml %}
+                {{ form(form) }}
+            {% endset %}
+
+            {{ formHtml|replace({'[br]': '<br/>'})|raw }}
+            <b>Chose your Carrier</b>
+        </div>
+        <div class="col-md-6">
+            <b>Your Order</b><br>
+            <b>Pay</b>
+        </div>
+    </div>
+{% endblock %}

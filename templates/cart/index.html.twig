@@ -54,7 +54,7 @@
     <div class="text-right">
         <b>Number of product: </b>{{ cart|length }}<br>
         <b>Subtotal ({{ totalquantity }} {{ (totalquantity > 1) ? 'items' : 'item' }}): </b>{{ ( total / 100 )|format_currency('EUR', locale='de') }}<br>
-        <a href="" class="btn btn-success">Proceed to checkout</a>
+        <a href="{{ path('order.index') }}" class="btn btn-success">Proceed to checkout</a>
     </div>
     {% else %}
         <hr class="mt-5">
